@@ -55,3 +55,61 @@
     <!-- search boxes -->
   </div>
 </div>
+<div class="busList">
+  <h2>All Available buses</h2>
+  <div class="bus-list">
+    <div class="bus-card" *ngFor="let bus of buses">
+      <div class="bus-header">
+        <span class="primo" *ngIf="bus.primo"
+          ><i class="fa fa-star"></i> Primo</span
+        >
+      </div>
+      <!-- buses Info -->
+      <div class="bus-details-row">
+        <div class="bus-details">
+          <div class="op-rat">
+            <div class="col-1">
+              <div class="bus-operator">{{ bus.operator }}</div>
+              <div class="bus-type">{{ bus.type }}</div>
+            </div>
+            <div class="bus-rating">
+              <div class="rating-star">
+                <i class="fa fa-star"></i> {{ bus.rating }}
+              </div>
+              <div class="rating-count">{{ bus.ratingCount }}</div>
+            </div>
+          </div>
+          <div class="time-price">
+            <div class="col-1">
+              <div class="bus-times">
+                <span class="bus-time">{{ bus.departure }}</span>
+                <span class="bus-arrow">—</span>
+                <span class="bus-time">{{ bus.arrival }}</span>
+              </div>
+              <div class="bus-meta">
+                <span>{{ bus.duration }}</span>
+                <span
+                  >{{ bus.seats }} Seats ({{ bus.singleSeats }} Single)</span
+                >
+              </div>
+            </div>
+            <div class="bus-price">
+              ₹{{ bus.price }}<span class="onwards"> Onwards</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- buses Info -->
+      <div class="bus-actions">
+        <button class="view-seats-btn">View seats</button>
+      </div>
+      <div class="bus-links">
+        <a href="#">Why book this bus?</a>
+        <a href="#">Boarding/ Dropping Points</a>
+        <a href="#">Ratings & Reviews</a>
+        <a href="#">Bus Photos</a>
+        <a href="#">Cancellation Policies</a>
+      </div>
+    </div>
+  </div>
+</div>

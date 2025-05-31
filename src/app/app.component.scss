@@ -1,7 +1,30 @@
+// .main-box {
+//   display: flex;
+//   height: 100vh;
+//   width: 86vw;
+//   border: 1px solid black;
+//   flex-direction: column;
+// }
 .main-box {
   display: flex;
   height: 100vh;
   width: 86vw;
+  max-width: 1400px; // Limit width on big monitors
   border: 1px solid black;
   flex-direction: column;
+  box-sizing: border-box;
+  margin: 0 auto; // Center horizontally
+  position: relative;
+
+  @media (max-width: 900px) {
+    width: 98vw;
+    border-width: 0.5px;
+    padding: 0 4px;
+  }
+
+  @media (max-width: 600px) {
+    width: 100vw;
+    border: none;
+    padding: 0 2px;
+  }
 }
