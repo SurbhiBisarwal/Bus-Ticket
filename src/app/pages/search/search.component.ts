@@ -1,14 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search',
   standalone: true, // <-- Add this line
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'], // <-- Correct property name
 })
 export class SearchComponent {
+  fromLocation: string = '';
+  destLocation: string = '';
+  searchFrom: string = '';
+  searchTo: string = '';
   buses = [
     {
       primo: true,
@@ -22,6 +27,8 @@ export class SearchComponent {
       seats: 10,
       singleSeats: 6,
       price: 750,
+      departureLocation: 'Bangalore',
+      destinationLocation: 'Chennai',
     },
     {
       primo: false,
@@ -35,6 +42,8 @@ export class SearchComponent {
       seats: 18,
       singleSeats: 1,
       price: 750,
+      departureLocation: 'Mumbai',
+      destinationLocation: 'Pune',
     },
     {
       primo: true,
@@ -48,6 +57,8 @@ export class SearchComponent {
       seats: 19,
       singleSeats: 5,
       price: 740,
+      departureLocation: 'Delhi',
+      destinationLocation: 'Jaipur',
     },
     {
       primo: false,
@@ -61,6 +72,8 @@ export class SearchComponent {
       seats: 15,
       singleSeats: 4,
       price: 800,
+      departureLocation: 'Hyderabad',
+      destinationLocation: 'Vizag',
     },
     {
       primo: true,
@@ -74,6 +87,8 @@ export class SearchComponent {
       seats: 12,
       singleSeats: 3,
       price: 950,
+      departureLocation: 'Kolkata',
+      destinationLocation: 'Durgapur',
     },
     {
       primo: false,
@@ -87,6 +102,8 @@ export class SearchComponent {
       seats: 20,
       singleSeats: 7,
       price: 700,
+      departureLocation: 'Ahmedabad',
+      destinationLocation: 'Surat',
     },
     {
       primo: false,
@@ -100,6 +117,8 @@ export class SearchComponent {
       seats: 14,
       singleSeats: 2,
       price: 820,
+      departureLocation: 'Lucknow',
+      destinationLocation: 'Kanpur',
     },
     {
       primo: true,
@@ -113,6 +132,8 @@ export class SearchComponent {
       seats: 16,
       singleSeats: 6,
       price: 980,
+      departureLocation: 'Chandigarh',
+      destinationLocation: 'Amritsar',
     },
     {
       primo: false,
@@ -126,6 +147,8 @@ export class SearchComponent {
       seats: 22,
       singleSeats: 8,
       price: 650,
+      departureLocation: 'Bhopal',
+      destinationLocation: 'Indore',
     },
     {
       primo: false,
@@ -139,6 +162,8 @@ export class SearchComponent {
       seats: 13,
       singleSeats: 4,
       price: 900,
+      departureLocation: 'Ranchi',
+      destinationLocation: 'Jamshedpur',
     },
     {
       primo: true,
@@ -152,6 +177,8 @@ export class SearchComponent {
       seats: 11,
       singleSeats: 2,
       price: 990,
+      departureLocation: 'Patna',
+      destinationLocation: 'Gaya',
     },
     {
       primo: false,
@@ -165,6 +192,8 @@ export class SearchComponent {
       seats: 17,
       singleSeats: 5,
       price: 770,
+      departureLocation: 'Guwahati',
+      destinationLocation: 'Shillong',
     },
     {
       primo: false,
@@ -178,6 +207,8 @@ export class SearchComponent {
       seats: 21,
       singleSeats: 7,
       price: 720,
+      departureLocation: 'Nagpur',
+      destinationLocation: 'Nashik',
     },
     {
       primo: true,
@@ -191,6 +222,8 @@ export class SearchComponent {
       seats: 9,
       singleSeats: 3,
       price: 1050,
+      departureLocation: 'Thiruvananthapuram',
+      destinationLocation: 'Kochi',
     },
     {
       primo: false,
@@ -204,6 +237,8 @@ export class SearchComponent {
       seats: 18,
       singleSeats: 6,
       price: 780,
+      departureLocation: 'Mangalore',
+      destinationLocation: 'Udupi',
     },
     {
       primo: false,
@@ -217,6 +252,8 @@ export class SearchComponent {
       seats: 15,
       singleSeats: 5,
       price: 860,
+      departureLocation: 'Varanasi',
+      destinationLocation: 'Allahabad',
     },
     {
       primo: true,
@@ -230,6 +267,8 @@ export class SearchComponent {
       seats: 20,
       singleSeats: 8,
       price: 930,
+      departureLocation: 'Coimbatore',
+      destinationLocation: 'Madurai',
     },
     {
       primo: false,
@@ -243,6 +282,8 @@ export class SearchComponent {
       seats: 19,
       singleSeats: 7,
       price: 800,
+      departureLocation: 'Jodhpur',
+      destinationLocation: 'Udaipur',
     },
     {
       primo: false,
@@ -256,6 +297,8 @@ export class SearchComponent {
       seats: 14,
       singleSeats: 4,
       price: 870,
+      departureLocation: 'Raipur',
+      destinationLocation: 'Bilaspur',
     },
     {
       primo: true,
@@ -269,6 +312,29 @@ export class SearchComponent {
       seats: 8,
       singleSeats: 2,
       price: 1100,
+      departureLocation: 'Agra',
+      destinationLocation: 'Mathura',
     },
   ];
+
+  get filteredBuses() {
+    return this.buses.filter((bus) => {
+      const fromMatch =
+        !this.searchFrom.trim() ||
+        bus.departureLocation
+          .toLowerCase()
+          .includes(this.searchFrom.toLowerCase());
+      const toMatch =
+        !this.searchTo.trim() ||
+        bus.destinationLocation
+          .toLowerCase()
+          .includes(this.searchTo.toLowerCase());
+      return fromMatch && toMatch;
+    });
+  }
+
+  onSearch() {
+    this.searchFrom = this.fromLocation;
+    this.searchTo = this.destLocation;
+  }
 }
