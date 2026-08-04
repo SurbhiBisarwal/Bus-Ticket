@@ -1,19 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-search',
-  standalone: true, // <-- Add this line
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'], // <-- Correct property name
+  styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent {
   fromLocation: string = '';
   destLocation: string = '';
   searchFrom: string = '';
   searchTo: string = '';
+  bookingMessage = '';
+  showProfileMenu = false;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public authService: AuthService,
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const seats = params.get('seats');
+      if (seats) {
+        this.bookingMessage = `Booking confirmed for seats ${seats}`;
+      }
+    });
+  }
+
   buses = [
     {
       primo: true,
@@ -318,17 +338,14 @@ export class SearchComponent {
   ];
 
   get filteredBuses() {
+    const term = this.searchFrom.trim().toLowerCase();
+    const dest = this.searchTo.trim().toLowerCase();
+
     return this.buses.filter((bus) => {
       const fromMatch =
-        !this.searchFrom.trim() ||
-        bus.departureLocation
-          .toLowerCase()
-          .includes(this.searchFrom.toLowerCase());
+        !term || bus.departureLocation.toLowerCase().includes(term);
       const toMatch =
-        !this.searchTo.trim() ||
-        bus.destinationLocation
-          .toLowerCase()
-          .includes(this.searchTo.toLowerCase());
+        !dest || bus.destinationLocation.toLowerCase().includes(dest);
       return fromMatch && toMatch;
     });
   }
@@ -336,5 +353,32 @@ export class SearchComponent {
   onSearch() {
     this.searchFrom = this.fromLocation;
     this.searchTo = this.destLocation;
+  }
+
+  toggleProfileMenu() {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
+
+  clearSearch() {
+    this.fromLocation = '';
+    this.destLocation = '';
+    this.searchFrom = '';
+    this.searchTo = '';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/search']);
+  }
+
+  bookBus(bus: (typeof this.buses)[number]) {
+    this.router.navigate(['/booking'], {
+      queryParams: {
+        operator: bus.operator,
+        departure: bus.departure,
+        arrival: bus.arrival,
+        price: bus.price,
+      },
+    });
   }
 }

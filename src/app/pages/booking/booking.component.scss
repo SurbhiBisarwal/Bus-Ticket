@@ -1,0 +1,257 @@
+.booking-shell {
+  padding: 24px;
+  background: linear-gradient(135deg, #fff7f7 0%, #f7f9fc 100%);
+  min-height: 100vh;
+}
+
+.booking-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.back-btn,
+.logout-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.back-btn {
+  background: white;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.logout-btn {
+  background: #fff;
+  color: #d32f2f;
+  border: 1px solid #fca5a5;
+}
+
+.booking-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  background: linear-gradient(90deg, #d32f2f, #b71c1c);
+  color: white;
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.hero-copy h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+.summary-card,
+.seat-panel,
+.details-panel {
+  background: #fff;
+  color: #222;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.summary-card {
+  min-width: 280px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  color: #5f6368;
+}
+
+.summary-row.total {
+  color: #d32f2f;
+  font-weight: 700;
+  padding-top: 8px;
+  border-top: 1px solid #e9ecef;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.panel-heading span {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.dot.available {
+  background: #e5e7eb;
+}
+.dot.booked {
+  background: #ef4444;
+}
+.dot.selected {
+  background: #16a34a;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.row-label {
+  width: 20px;
+  font-weight: 700;
+  color: #6b7280;
+}
+.seat {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #f9fafb;
+  cursor: pointer;
+}
+.seat.selected {
+  background: #16a34a;
+  color: white;
+  border-color: #16a34a;
+}
+.seat.booked {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  cursor: not-allowed;
+}
+
+.passenger-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.passenger-top,
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.field-row input,
+.passenger-card select {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.ghost-btn,
+.confirm-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ghost-btn {
+  background: #eef2ff;
+  color: #3730a3;
+}
+.add-btn {
+  margin: 8px 0 16px;
+}
+.confirm-btn {
+  width: 100%;
+  background: #8b0000;
+  color: white;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+  cursor: pointer;
+}
+.confirm-btn:hover:not(:disabled) {
+  background: #700000;
+  transform: translateY(-1px);
+}
+.confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.travel-meta {
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+  .booking-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .booking-shell {
+    padding: 12px;
+  }
+  .booking-hero,
+  .summary-card,
+  .seat-panel,
+  .details-panel {
+    padding: 16px;
+  }
+  .seat {
+    width: 40px;
+    height: 40px;
+  }
+  .field-row {
+    flex-direction: column;
+  }
+}

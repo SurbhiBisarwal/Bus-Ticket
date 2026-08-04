@@ -1,35 +1,61 @@
 <header class="search-container">
   <img class="brand-logo" src="images/redBus.png" alt="logo" />
   <div class="search-menu">
-    <div>
-      <span><img src="images/menu2.png" alt="lines" /></span>
-      bookings
-    </div>
-    <div>
+    <a routerLink="/my-bookings" class="menu-item">
+      <span><img src="images/menu2.png" alt="lines" /></span>Bookings
+    </a>
+    <div class="menu-item">
       <span><img src="images/help.png" alt="help" /></span>Help
     </div>
-    <div>
-      <span><img src="images/account.png" alt="account" /></span>Account
-    </div>
+    <ng-container *ngIf="authService.isLoggedIn; else loginLink">
+      <div class="profile-menu">
+        <button
+          class="menu-item account-info"
+          type="button"
+          (click)="toggleProfileMenu()"
+        >
+          <span><img src="images/account.png" alt="account" /></span>
+          {{ authService.currentUser || "Account" }}
+          <span class="menu-caret">▾</span>
+        </button>
+        <div class="profile-dropdown" *ngIf="showProfileMenu">
+          <a
+            routerLink="/my-bookings"
+            class="profile-dropdown-item"
+            (click)="showProfileMenu = false"
+          >
+            My bookings
+          </a>
+          <button
+            class="profile-dropdown-item"
+            type="button"
+            (click)="logout(); showProfileMenu = false"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #loginLink>
+      <a routerLink="/login" class="menu-item">
+        <span><img src="images/account.png" alt="account" /></span>Account
+      </a>
+    </ng-template>
   </div>
 </header>
-<div class="banner-container">
-  <!-- banner -->
-  <div>
-    <img src="images/HomeBanner.webp" alt="homeBanner" id="banner" />
-    <div class="banner-text">
-      <h1>India`s No.1 Online</h1>
-      <h1>bus Ticket Booking Site</h1>
-    </div>
-  </div>
-  <!-- banner -->
 
-  <!-- search boxes -->
+<div class="banner-container">
+  <img src="images/HomeBanner.webp" alt="homeBanner" id="banner" />
+  <div class="banner-text">
+    <p class="banner-pill">Safe. Fast. Trusted.</p>
+    <h1>India’s No.1 bus ticket booking site</h1>
+    <p>Book buses, compare fares, and travel with confidence.</p>
+  </div>
+
   <div class="search-box">
     <div class="search-inputs">
       <input
         class="input-field"
-        style="border-top-left-radius: 13px; border-bottom-left-radius: 13px"
         type="text"
         placeholder="From"
         [(ngModel)]="fromLocation"
@@ -40,38 +66,40 @@
         placeholder="To"
         [(ngModel)]="destLocation"
       />
-      <input
-        class="input-field"
-        style="border-top-right-radius: 13px; border-bottom-right-radius: 13px"
-        type="date"
-      />
+      <input class="input-field" type="date" />
     </div>
-
-    <button
-      style="
-        border-radius: 13px;
-        height: 65%;
-        width: 20%;
-        background-color: #b21616;
-        color: white;
-      "
-      (click)="onSearch()"
-    >
-      Search buses
-    </button>
-    <!-- search boxes -->
+    <div class="search-actions">
+      <button class="search-btn" (click)="onSearch()">Search buses</button>
+      <button class="clear-btn" type="button" (click)="clearSearch()">
+        Clear
+      </button>
+    </div>
   </div>
 </div>
+
 <div class="busList">
-  <h2>All Available buses</h2>
+  <div class="booking-success" *ngIf="bookingMessage">
+    <strong>✅ Booking confirmed</strong>
+    <span>{{ bookingMessage }}</span>
+  </div>
+
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Trending routes</p>
+      <h2>All available buses</h2>
+    </div>
+    <div class="chip">{{ filteredBuses.length }} options found</div>
+  </div>
+
   <div class="bus-list">
     <div class="bus-card" *ngFor="let bus of filteredBuses">
       <div class="bus-header">
         <span class="primo" *ngIf="bus.primo"
           ><i class="fa fa-star"></i> Primo</span
         >
+        <span class="bus-badge">{{ bus.type }}</span>
       </div>
-      <!-- buses Info -->
+
       <div class="bus-details-row">
         <div class="bus-details">
           <div class="op-rat">
@@ -83,39 +111,40 @@
               <div class="rating-star">
                 <i class="fa fa-star"></i> {{ bus.rating }}
               </div>
-              <div class="rating-count">{{ bus.ratingCount }}</div>
+              <div class="rating-count">{{ bus.ratingCount }} reviews</div>
             </div>
           </div>
+
           <div class="time-price">
             <div class="col-1">
               <div class="bus-times">
                 <span class="bus-time">{{ bus.departure }}</span>
-                <span class="bus-arrow">—</span>
+                <span class="bus-arrow">→</span>
                 <span class="bus-time">{{ bus.arrival }}</span>
               </div>
               <div class="bus-meta">
                 <span>{{ bus.duration }}</span>
                 <span
-                  >{{ bus.seats }} Seats ({{ bus.singleSeats }} Single)</span
+                  >{{ bus.seats }} seats · {{ bus.singleSeats }} single</span
                 >
               </div>
             </div>
             <div class="bus-price">
-              ₹{{ bus.price }}<span class="onwards"> Onwards</span>
+              ₹{{ bus.price }}<span class="onwards"> onwards</span>
             </div>
           </div>
         </div>
       </div>
-      <!-- buses Info -->
+
       <div class="bus-actions">
-        <button class="view-seats-btn">View seats</button>
+        <button class="view-seats-btn" (click)="bookBus(bus)">Book now</button>
       </div>
+
       <div class="bus-links">
         <a href="#">Why book this bus?</a>
-        <a href="#">Boarding/ Dropping Points</a>
-        <a href="#">Ratings & Reviews</a>
-        <a href="#">Bus Photos</a>
-        <a href="#">Cancellation Policies</a>
+        <a href="#">Boarding points</a>
+        <a href="#">Reviews</a>
+        <a href="#">Photos</a>
       </div>
     </div>
   </div>

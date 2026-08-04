@@ -1,0 +1,42 @@
+<div class="bookings-shell">
+  <div class="bookings-header">
+    <div>
+      <p class="eyebrow">Your bookings</p>
+      <h1>Upcoming trips</h1>
+    </div>
+    <a routerLink="/search" class="back-link">Search more buses</a>
+  </div>
+
+  <div class="booking-card" *ngFor="let booking of bookings">
+    <div class="booking-top">
+      <div>
+        <strong>{{ booking.operator }}</strong>
+        <p>{{ booking.departure }} → {{ booking.arrival }}</p>
+      </div>
+      <div>
+        <span class="booking-price">₹{{ booking.total }}</span>
+        <span class="booking-date">{{ booking.createdAt }}</span>
+      </div>
+    </div>
+
+    <div class="booking-details">
+      <span>Seats: {{ booking.seats.join(", ") }}</span>
+      <span>Booked by: {{ booking.user }}</span>
+      <span>Ticket count: {{ booking.seats.length }}</span>
+    </div>
+
+    <div class="booking-actions">
+      <button
+        class="cancel-btn"
+        type="button"
+        (click)="cancelBooking(booking.id)"
+      >
+        Cancel booking
+      </button>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="bookings.length === 0">
+    <p>No bookings yet. Book your first trip now!</p>
+  </div>
+</div>

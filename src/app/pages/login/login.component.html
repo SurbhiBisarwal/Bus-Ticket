@@ -1,0 +1,31 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <h2>Login to Continue</h2>
+    <p>Sign in to access booking and view your travel history.</p>
+
+    <div class="field-group">
+      <label>Username</label>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="Enter your username"
+      />
+    </div>
+
+    <div class="field-group">
+      <label>Password</label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="Enter your password"
+      />
+    </div>
+
+    <div class="login-actions">
+      <button (click)="login()">Login</button>
+      <a routerLink="/search" class="back-link">Back to search</a>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </div>
+</div>

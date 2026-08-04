@@ -1,1 +1,140 @@
-<p>booking works!</p>
+<div class="booking-shell">
+  <div class="booking-topbar">
+    <button class="back-btn" type="button" (click)="goBack()">
+      ← Back to search
+    </button>
+    <button
+      class="logout-btn"
+      type="button"
+      *ngIf="authService.isLoggedIn"
+      (click)="logout()"
+    >
+      Logout
+    </button>
+  </div>
+  <section class="booking-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Live booking</p>
+      <h1>Reserve your seats in seconds</h1>
+      <p>
+        Choose your preferred aisle, confirm passenger details, and pay safely.
+      </p>
+    </div>
+    <div class="summary-card">
+      <h3>Trip Summary</h3>
+      <div class="summary-row">
+        <span>Route</span><strong>Delhi → Jaipur</strong>
+      </div>
+      <div class="summary-row">
+        <span>Departure</span><strong>22:40</strong>
+      </div>
+      <div class="summary-row"><span>Arrival</span><strong>04:39</strong></div>
+      <div class="summary-row">
+        <span>Seats</span><strong>{{ selectedSeatCount || "Choose" }}</strong>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span><strong>₹{{ totalFare || 0 }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="booking-grid">
+    <div class="seat-panel">
+      <div class="panel-heading">
+        <h2>Select seats</h2>
+        <span>Booked seats shown in red</span>
+      </div>
+      <div class="legend">
+        <span><i class="dot available"></i>Available</span>
+        <span><i class="dot booked"></i>Booked</span>
+        <span><i class="dot selected"></i>Selected</span>
+      </div>
+      <div class="seat-map">
+        <div
+          class="seat-row"
+          *ngFor="let row of seatLayout; let rowIndex = index"
+        >
+          <span class="row-label">{{ row[0].charAt(0) }}</span>
+          <button
+            class="seat"
+            *ngFor="let seat of row"
+            [class.booked]="bookedSeats.includes(seat)"
+            [class.selected]="selectedSeats.includes(seat)"
+            [disabled]="bookedSeats.includes(seat)"
+            (click)="toggleSeat(seat)"
+          >
+            {{ seat }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-panel">
+      <div class="panel-heading">
+        <h2>Passenger details</h2>
+        <span>One ticket per passenger</span>
+      </div>
+
+      <div
+        class="passenger-card"
+        *ngFor="let passenger of passengers; let i = index"
+      >
+        <div class="passenger-top">
+          <strong>Passenger {{ i + 1 }}</strong>
+          <button
+            type="button"
+            class="ghost-btn"
+            *ngIf="passengers.length > 1"
+            (click)="removePassenger(i)"
+          >
+            Remove
+          </button>
+        </div>
+        <div class="field-row">
+          <input
+            type="text"
+            placeholder="Full name"
+            [(ngModel)]="passenger.name"
+          />
+          <input
+            type="number"
+            placeholder="Age"
+            min="1"
+            max="120"
+            [(ngModel)]="passenger.age"
+          />
+        </div>
+        <select [(ngModel)]="passenger.gender">
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <button type="button" class="ghost-btn add-btn" (click)="addPassenger()">
+        + Add passenger
+      </button>
+
+      <div class="travel-meta">
+        <h3>Travel preferences</h3>
+        <div class="summary-row">
+          <span>Boarding</span><strong>{{ boardingPoint }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Dropping</span><strong>{{ droppingPoint }}</strong>
+        </div>
+        <div class="summary-row">
+          <span>Payment</span><strong>{{ paymentMethod }}</strong>
+        </div>
+      </div>
+
+      <button
+        class="confirm-btn"
+        (click)="confirmBooking()"
+        [disabled]="!isSeatSelectionComplete"
+      >
+        Confirm booking
+      </button>
+    </div>
+  </section>
+</div>
