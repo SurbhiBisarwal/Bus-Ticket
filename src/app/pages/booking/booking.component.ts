@@ -28,7 +28,8 @@ export class BookingComponent {
       (_, col) => `${String.fromCharCode(65 + row)}${col + 1}`,
     ),
   );
-  bookedSeats = ['A2', 'B3', 'C1', 'D4'];
+  bookedSeats: string[] = [];
+  bookingError = '';
   boardingPoint = 'M.G. Road';
   droppingPoint = 'Electronic City';
   paymentMethod = 'UPI';
@@ -63,6 +64,13 @@ export class BookingComponent {
       this.travellerMobile = departure;
       this.email = arrival;
     });
+
+    this.bookingService.bookings$.subscribe(() => {
+      this.bookedSeats = this.bookingService.getBookedSeats();
+      this.selectedSeats = this.selectedSeats.filter(
+        (seat) => !this.bookedSeats.includes(seat),
+      );
+    });
   }
 
   get selectedSeatCount(): number {
@@ -87,6 +95,7 @@ export class BookingComponent {
       return;
     }
 
+    this.bookingError = '';
     this.selectedSeats = this.selectedSeats.includes(seat)
       ? this.selectedSeats.filter((item) => item !== seat)
       : [...this.selectedSeats, seat];
@@ -116,6 +125,18 @@ export class BookingComponent {
       this.router.navigate(['/login'], {
         queryParams: { redirectUrl: '/booking' },
       });
+      return;
+    }
+
+    const unavailableSeats = this.bookingService.getUnavailableSeats(
+      this.selectedSeats,
+    );
+
+    if (unavailableSeats.length) {
+      this.bookingError = `Seat(s) ${unavailableSeats.join(', ')} are already booked. Please choose other seats.`;
+      this.selectedSeats = this.selectedSeats.filter(
+        (seat) => !unavailableSeats.includes(seat),
+      );
       return;
     }
 

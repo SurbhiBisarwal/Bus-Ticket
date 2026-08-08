@@ -24,6 +24,14 @@ export class BookingService {
   );
   bookings$ = this.bookingSubject.asObservable();
 
+  constructor() {
+    window.addEventListener('storage', (event) => {
+      if (event.key === this.storageKey) {
+        this.bookingSubject.next(this.loadBookings());
+      }
+    });
+  }
+
   private loadBookings(): BookingRecord[] {
     try {
       return JSON.parse(
@@ -42,6 +50,17 @@ export class BookingService {
   addBooking(record: BookingRecord): void {
     const current = this.bookingSubject.value;
     this.saveBookings([record, ...current]);
+  }
+
+  getBookedSeats(): string[] {
+    return Array.from(
+      new Set(this.bookingSubject.value.flatMap((booking) => booking.seats)),
+    );
+  }
+
+  getUnavailableSeats(seats: string[]): string[] {
+    const booked = new Set(this.getBookedSeats());
+    return seats.filter((seat) => booked.has(seat));
   }
 
   cancelBooking(bookingId: string): void {
